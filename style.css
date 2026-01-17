@@ -339,4 +339,9 @@ a:active { color: #4CF; }
 		top: 1rem;
 	}
 	
+	#event-image {
+		max-width: 100%;
+		max-height: 100%;
+	}
+	
 }
