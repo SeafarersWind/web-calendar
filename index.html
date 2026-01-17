@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Calendar</title>
+	<link href="style.css" rel="stylesheet">
+</head>
+
+
+
+<body>
+	<div id="calendar-container">
+		<h1>Calendar Title</h1>
+		
+		<div class="calendar">
+			
+			<div class="calendar-header">
+				<button id="prev-month">‹</button>
+				<div id="month-year"></div>
+				<button id="next-month">›</button>
+			</div>
+			
+			<div class="calendar-body">
+				<div class="calendar-weekdays">
+					<div>Sun</div>
+					<div>Mon</div>
+					<div>Tue</div>
+					<div>Wed</div>
+					<div>Thu</div>
+					<div>Fri</div>
+					<div>Sat</div>
+				</div>
+				<div class="calendar-dates">
+					<!-- dates -->
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	
+	<div id="event-container">
+		<h1 id="event-title"></h1>
+		<img id="event-image">
+		<p id="event-info"></p>
+		<ol id="event-list"></ol>
+	</div>
+	
+	<script type="module" src="script.js"></script>
+</body>
+
+
+
+</html>
