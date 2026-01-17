@@ -4,13 +4,13 @@
 			"title": "First Event",
 			"image": "kahlua-1.jpg",
 			"info": "This is the first event.",
-			"all-day": false,
-			"time-start": "1:00 pm",
-			"time-end": "4:00 pm",
+			"all_day": false,
+			"time_start": "1:00 pm",
+			"time_end": "4:00 pm",
 			"address": "1 Centennial Square",
 			"location": "Centennial Square",
 			"icon": "heart.png",
-			"icon-priority": 1,
+			"icon_priority": 1,
 			"duration": 1
 		},
 		
@@ -21,13 +21,13 @@
 			
 			"info": "This is the second event.",
 			
-			"all-day": true,
+			"all_day": true,
 			
 			"location": "Centennial Square",
 			"address": "1 Centennial Square",
 			
-			"icon": "icon name",
-			"icon-priority": 1
+			"icon": "spade.png",
+			"icon_priority": 1
 		},
 		
 		{
@@ -37,15 +37,15 @@
 			
 			"info": "This is the third event.",
 			
-			"all-day": false,
-			"time-start": "1:00 pm",
-			"time-end": "4:00 pm",
+			"all_day": false,
+			"time_start": "1:00 pm",
+			"time_end": "4:00 pm",
 			
 			"location": "Centennial Square",
 			"address": "1 Centennial Square",
 			
-			"icon": "icon name",
-			"icon-priority": 1
+			"icon": "club.png",
+			"icon_priority": 1
 		}
 	]
 }

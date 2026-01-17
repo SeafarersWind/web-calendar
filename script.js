@@ -8,6 +8,9 @@ const eventTitle = document.getElementById('event-title');
 const eventImage = document.getElementById('event-image');
 const eventInfo = document.getElementById('event-info');
 const eventList = document.getElementById('event-list');
+const eventFullList = document.getElementById('event-full-list');
+
+const closeButton = document.getElementById('close-button');
 
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
@@ -52,7 +55,7 @@ const months = [
 
 
 
-function renderCalendar(month, year) {
+async function renderCalendar(month, year) {
 	calendarDates.innerHTML = '';
 	monthYear.textContent = `${months[month]} ${year}`;
 	
@@ -88,33 +91,46 @@ function renderCalendar(month, year) {
 			
 			let eventPath = `./events/${entryYear}-${entryMonth+1}-${entryDay}.json`;
 			
-			fetch(eventPath)
-			.then(response => {
-				if(!response.ok) {
-					throw new Error("HTTP error " + response.status);
-				}
-				return response.json();
-			})
-			.then(json => {
+			let eventData = await getEventData(eventPath);
+			if(eventData) {
 				entry.classList.add('event');
-				dates[entryDate] = json;
+				dates[entryDate] = eventData;
+				
+				let listDate = document.createElement('div');
+				listDate.textContent = entryDate.toDateString();
+				eventFullList.appendChild(listDate);
+				
+				let dateIcons = document.createElement('div');
+				dateIcons.classList.add('icons');
+				entry.appendChild(dateIcons);
+				
+				let iconPriority = 0;
 				for(let i = 0; i < dates[entryDate].events.length; i++) {
-console.log(event);
-					if(dates[entryDate].events[i].icon) {
+					let listEvent = document.createElement('li');
+					let a = document.createElement('a');
+					if(dates[entryDate].events[i].title) { a.textContent = dates[entryDate].events[i].title; }
+					else { a.textContent = "(title not provided)"; }
+					a.href = "javascript:void(0)";
+					listEvent.appendChild(a);
+					
+					listEvent.addEventListener('click', () => {
+						displayEvent(dates[entryDate].events[i]);
+					});
+					
+					eventFullList.appendChild(listEvent);
+					
+					if(dates[entryDate].events[i].icon && dates[entryDate].events[i].icon_priority >= iconPriority) {
+						if(dates[entryDate].events[i].icon_priority > iconPriority) {
+							dateIcons.replaceChildren();
+							iconPriority = dates[entryDate].events[i].icon_priority;
+						}
 						let icon = document.createElement('img');
 						icon.src = `events/icons/${dates[entryDate].events[i].icon}`;
-console.log(icon.src);
 						icon.classList.add('icon');
-						entry.appendChild(icon);
-						break;
+						dateIcons.appendChild(icon);
 					}
 				}
-			})
-			.catch(function (err) {
-				if(!err instanceof TypeError || err.message != "NetworkError when attempting to fetch resource.") {
-					console.error(err);
-				}
-			})
+			}
 			
 			let entryText = document.createElement('div');
 			entryText.classList.add('date-num');
@@ -126,6 +142,26 @@ console.log(icon.src);
 			day++;
 		}
 	}
+	
+	displayEventFullList();
+}
+
+async function getEventData(eventPath) {
+	return await fetch(eventPath)
+	.then(response => {
+		if(!response.ok) { throw new Error("HTTP error " + response.status); }
+		return response.json();
+	})
+	.then(json => {
+		return json;
+	})
+	.catch(function (err) {
+		if(!err instanceof TypeError || err.message != "NetworkError when attempting to fetch resource.") {
+			console.error(err);
+		}
+		
+		return false;
+	})
 }
 
 
@@ -139,6 +175,8 @@ function clearEvent() {
 	eventInfo.style.display = 'none';
 	eventList.replaceChildren();
 	eventList.style.display = 'none';
+	eventFullList.style.display = 'none';
+	closeButton.style.display = 'none';
 }
 
 
@@ -160,6 +198,8 @@ function displayEvent(event) {
 	if(event.info) { eventInfo.textContent = event.info; }
 	else { eventInfo.textContent = "No description provided."; }
 	eventInfo.style.display = 'block';
+	
+	closeButton.style.display = 'block';
 }
 
 
@@ -167,6 +207,10 @@ function displayEvent(event) {
 function displayEventList(list, date) {
 	console.log(list);
 	clearEvent();
+	
+	let listDate = document.createElement('div');
+	listDate.textContent = date.toDateString();
+	eventList.appendChild(listDate);
 	
 	for(let i = 0; i < list.length; i++) {
 		let event = document.createElement('li');
@@ -183,10 +227,17 @@ function displayEventList(list, date) {
 		eventList.appendChild(event);
 	}
 	
-	eventTitle.style.display = 'block';
-	eventTitle.textContent = date.toDateString();
-	
 	eventList.style.display = 'block';
+	
+	closeButton.style.display = 'block';
+}
+
+
+
+function displayEventFullList() {
+	clearEvent();
+	
+	eventFullList.style.display = 'block';
 }
 
 
@@ -233,9 +284,6 @@ calendarDates.addEventListener('click', (e) => {
 		}
 	}
 	
-	
-	console.log(`You clicked on ${e.target.textContent} ${months[month]} ${year}`);
-	
 	let clickDate = new Date(year, month, day);
 	if(dates[clickDate]) {
 		let date = dates[clickDate];
@@ -245,6 +293,10 @@ calendarDates.addEventListener('click', (e) => {
 			displayEventList(date.events, clickDate);
 		}
 	} else {
-		clearEvent();
+		displayEventFullList();
 	}
 });
+
+closeButton.addEventListener('click', () => {
+	displayEventFullList();
+})

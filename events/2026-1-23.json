@@ -4,13 +4,13 @@
 			"title": "Event",
 			"image": "kahlua-4.jpg",
 			"info": "Description.",
-			"all-day": false,
-			"time-start": "1:00 pm",
-			"time-end": "4:00 pm",
+			"all_day": false,
+			"time_start": "1:00 pm",
+			"time_end": "4:00 pm",
 			"address": "1 Centennial Square",
 			"location": "Centennial Square",
 			"icon": "diamond.png",
-			"icon-priority": 1,
+			"icon_priority": 1,
 			"duration": 1
 		}
 	]
