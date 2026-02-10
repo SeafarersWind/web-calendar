@@ -1,11 +1,10 @@
 body {
 	margin: 0;
-	min-height: 100vh;
-	height: fit-content;
+	min-height: fit-content;
+	height: 100vh;
 	width: 100vw;
 	display: flex;
 	flex-direction: row;
-	overflow-y: scroll;
 	overflow-x: hidden;
 	
 	font-family: Arial, sans-serif;
@@ -20,7 +19,10 @@ a:active { color: #4CF; }
 
 #calendar-container {
 	width: 40%;
-	min-width: fit-content;
+	min-width: 400px;
+	min-height: fit-content;
+	
+	overflow: auto;
 	
 	background-color: var(--bg);
 	color: var(--fg);
@@ -47,13 +49,14 @@ a:active { color: #4CF; }
 #event-container {
 	position: relative;
 	width: 60%;
+	min-height: 100%;
 	padding: 0 1rem;
 	
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	
-	overflow: scroll;
+	overflow: auto;
 	
 	background-color: var(--bg);
 	color: var(--fg);
@@ -151,6 +154,7 @@ a:active { color: #4CF; }
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%,-50%);
+	pointer-events: none;
 	z-index: 2;
 }
 
@@ -159,6 +163,7 @@ a:active { color: #4CF; }
 	width: 100%;
 	height: 100%;
 	z-index: 1;
+	pointer-events: none;
 }
 
 .date .icons .icon {
@@ -260,8 +265,7 @@ a:active { color: #4CF; }
 #top-bar {
 	position: absolute;
 	right: 4rem;
-	top: 2rem;
-	height: calc(100% - 2rem);
+	height: 100%;
 }
 
 #close-button {
@@ -277,14 +281,13 @@ a:active { color: #4CF; }
         linear-gradient(90deg, transparent var(--padding), var(--fg) var(--padding), var(--fg) 40%, transparent 40%),
         linear-gradient(90deg, transparent calc(var(--padding) + 5px), var(--fg) calc(var(--padding) + 3px), var(--fg) 40%, transparent 40%);
     background-size:
-        100% 2px,
+        26px 2px,
         100% 2px;
     background-position:
-        left bottom calc(var(--padding) + 0.3%),
+        left 10px bottom calc(var(--padding) + 0.3%),
         left top calc(var(--padding) + 3px);
     background-repeat: no-repeat;
 }
-
 #close-button:before {
     content: '';
     display: block;
@@ -293,7 +296,6 @@ a:active { color: #4CF; }
     height: calc(100% - var(--padding)*2 - 3px);
     left: 40%;
     bottom: var(--padding);
-    /* background-color: gold; */
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
     border: 2px solid var(--fg);
@@ -303,13 +305,12 @@ a:active { color: #4CF; }
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 #close-button:after {
     content: '';
     display: block;
     position: absolute;
     left: calc(var(--padding) + 2px);
-    top: calc(var(--padding) - 6px);
+    top: calc(var(--padding) - 5px);
     width: 0; 
     height: 0;
     border-top: 10px solid transparent;
@@ -323,16 +324,22 @@ a:active { color: #4CF; }
 	
 	body {
 		flex-direction: column;
+		height: fit-content;
 	}
 	
 	#calendar-container {
 		width: 100%;
+		overflow: visible;
 	}
 	
 	#event-container {
 		width: 100%;
 		min-height: 100vh;
 		overflow: visible;
+	}
+	
+	#top-bar {
+		right: 1rem;
 	}
 	
 	#close-button {

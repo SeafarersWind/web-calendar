@@ -16,6 +16,9 @@ let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 
+let firstDate;
+let lastDate;
+
 let dates = {};
 
 const months = [
@@ -55,16 +58,17 @@ const months = [
 
 
 
-async function renderCalendar(month, year) {
+function renderCalendar(month, year) {
 	calendarDates.innerHTML = '';
 	monthYear.textContent = `${months[month]} ${year}`;
 	
 	const today = new Date();
 	const firstDayOfWeek = new Date(year, month, 1).getDay();
 	const daysInMonth = new Date(year, month + 1, 0).getDate();
-	const daysInPrevMonth = new Date(year, month, 0).getDate();
 	
 	let day = 1 - firstDayOfWeek;
+	firstDate = new Date(year, month, day);
+	
 	while(day <= daysInMonth) {
 		for(let i = 0; i < 7; i++) {
 			const entry = document.createElement('div');
@@ -74,6 +78,9 @@ async function renderCalendar(month, year) {
 			const entryYear = entryDate.getFullYear();
 			
 			entry.classList.add('date');
+			entry.setAttribute('day', entryDay);
+			entry.setAttribute('month', entryMonth);
+			entry.setAttribute('year', entryYear);
 			
 			if(day < 1) {
 				entry.classList.add('prev-month');
@@ -89,49 +96,6 @@ async function renderCalendar(month, year) {
 				entry.classList.add('current-date');
 			}
 			
-			let eventPath = `./events/${entryYear}-${entryMonth+1}-${entryDay}.json`;
-			
-			let eventData = await getEventData(eventPath);
-			if(eventData) {
-				entry.classList.add('event');
-				dates[entryDate] = eventData;
-				
-				let listDate = document.createElement('div');
-				listDate.textContent = entryDate.toDateString();
-				eventFullList.appendChild(listDate);
-				
-				let dateIcons = document.createElement('div');
-				dateIcons.classList.add('icons');
-				entry.appendChild(dateIcons);
-				
-				let iconPriority = 0;
-				for(let i = 0; i < dates[entryDate].events.length; i++) {
-					let listEvent = document.createElement('li');
-					let a = document.createElement('a');
-					if(dates[entryDate].events[i].title) { a.textContent = dates[entryDate].events[i].title; }
-					else { a.textContent = "(title not provided)"; }
-					a.href = "javascript:void(0)";
-					listEvent.appendChild(a);
-					
-					listEvent.addEventListener('click', () => {
-						displayEvent(dates[entryDate].events[i]);
-					});
-					
-					eventFullList.appendChild(listEvent);
-					
-					if(dates[entryDate].events[i].icon && dates[entryDate].events[i].icon_priority >= iconPriority) {
-						if(dates[entryDate].events[i].icon_priority > iconPriority) {
-							dateIcons.replaceChildren();
-							iconPriority = dates[entryDate].events[i].icon_priority;
-						}
-						let icon = document.createElement('img');
-						icon.src = `events/icons/${dates[entryDate].events[i].icon}`;
-						icon.classList.add('icon');
-						dateIcons.appendChild(icon);
-					}
-				}
-			}
-			
 			let entryText = document.createElement('div');
 			entryText.classList.add('date-num');
 			entryText.textContent = entryDay;
@@ -140,6 +104,62 @@ async function renderCalendar(month, year) {
 			
 			calendarDates.appendChild(entry);
 			day++;
+		}
+	}
+	
+	lastDate = new Date(year, month, day);
+}
+
+async function getEvents() {
+	eventFullList.replaceChildren();
+	
+	for(const entry of calendarDates.childNodes) {
+		const entryDay = parseInt(entry.getAttribute('day'), 10);
+		const entryMonth = parseInt(entry.getAttribute('month'), 10);
+		const entryYear = parseInt(entry.getAttribute('year'), 10);
+		const entryDate = new Date(entryYear, entryMonth, entryDay);
+		
+		let eventPath = `./events/${entryYear}-${entryMonth+1}-${entryDay}.json`;
+		
+		let eventData = await getEventData(eventPath);
+		if(eventData) {
+			entry.classList.add('event');
+			dates[entryDate] = eventData;
+			
+			let listDate = document.createElement('div');
+			listDate.textContent = entryDate.toDateString();
+			eventFullList.appendChild(listDate);
+			
+			let dateIcons = document.createElement('div');
+			dateIcons.classList.add('icons');
+			entry.appendChild(dateIcons);
+			
+			let iconPriority = 0;
+			for(let i = 0; i < dates[entryDate].events.length; i++) {
+				let listEvent = document.createElement('li');
+				let a = document.createElement('a');
+				if(dates[entryDate].events[i].title) { a.textContent = dates[entryDate].events[i].title; }
+				else { a.textContent = "(title not provided)"; }
+				a.href = "javascript:void(0)";
+				listEvent.appendChild(a);
+				
+				listEvent.addEventListener('click', () => {
+					displayEvent(dates[entryDate].events[i]);
+				});
+				
+				eventFullList.appendChild(listEvent);
+				
+				if(dates[entryDate].events[i].icon && dates[entryDate].events[i].icon_priority >= iconPriority) {
+					if(dates[entryDate].events[i].icon_priority > iconPriority) {
+						dateIcons.replaceChildren();
+						iconPriority = dates[entryDate].events[i].icon_priority;
+					}
+					let icon = document.createElement('img');
+					icon.src = `events/icons/${dates[entryDate].events[i].icon}`;
+					icon.classList.add('icon');
+					dateIcons.appendChild(icon);
+				}
+			}
 		}
 	}
 	
@@ -246,6 +266,7 @@ function displayEventFullList() {
 
 
 renderCalendar(currentMonth, currentYear);
+getEvents();
 
 prevMonthBtn.addEventListener('click', () => {
 	currentMonth--;
@@ -254,6 +275,7 @@ prevMonthBtn.addEventListener('click', () => {
 		currentYear--;
 	}
 	renderCalendar(currentMonth, currentYear);
+	getEvents();
 });
 
 nextMonthBtn.addEventListener('click', () => {
@@ -263,26 +285,13 @@ nextMonthBtn.addEventListener('click', () => {
 		currentYear++;
 	}
 	renderCalendar(currentMonth, currentYear);
+	getEvents();
 });
 
 calendarDates.addEventListener('click', (e) => {
-	let day = e.target.textContent;
-	let month = currentMonth;
-	let year = currentYear;
-	
-	if(e.target.classList.contains('prev-month')) {
-		month--;
-		if(month < 0) {
-			month = 11;
-			year--;
-		}
-	} else if (e.target.classList.contains('next-month')) {
-		month++;
-		if(month >= 12) {
-			month = 0;
-			year++;
-		}
-	}
+	let day = e.target.getAttribute('day');
+	let month = e.target.getAttribute('month');
+	let year = e.target.getAttribute('year');
 	
 	let clickDate = new Date(year, month, day);
 	if(dates[clickDate]) {
