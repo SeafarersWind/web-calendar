@@ -168,6 +168,7 @@ async function getEvents() {
 		// }
 	}
 	
+console.log(promises);
 	Promise.all(promises).then((events) => {
 		for(let i = 0; i < events.length; i++) {
 			const eventData = events[i];
@@ -177,6 +178,7 @@ async function getEvents() {
 			const entryYear = parseInt(entry.getAttribute('year'), 10);
 			const entryDate = new Date(entryYear, entryMonth, entryDay);
 			if(eventData) {
+console.log(`adding events to ${entryDate.toDateString()}`);
 				entry.classList.add('event');
 				dates[entryDate] = eventData;
 				
