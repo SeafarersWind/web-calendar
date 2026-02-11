@@ -271,6 +271,8 @@ a:active { color: #4CF; }
 #close-button {
     --padding: 20%;
     
+    display: none;
+    
 	position: sticky;
 	top: 2rem;
 	width: 50px;

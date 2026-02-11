@@ -113,7 +113,10 @@ function renderCalendar(month, year) {
 async function getEvents() {
 	eventFullList.replaceChildren();
 	
-	for(const entry of calendarDates.childNodes) {
+	let promises = new Array(calendarDates.childElementCount);
+	
+	for(let i = 0; i < calendarDates.childElementCount; i++) {
+		const entry = calendarDates.childNodes[i];
 		const entryDay = parseInt(entry.getAttribute('day'), 10);
 		const entryMonth = parseInt(entry.getAttribute('month'), 10);
 		const entryYear = parseInt(entry.getAttribute('year'), 10);
@@ -121,47 +124,99 @@ async function getEvents() {
 		
 		let eventPath = `./events/${entryYear}-${entryMonth+1}-${entryDay}.json`;
 		
-		let eventData = await getEventData(eventPath);
-		if(eventData) {
-			entry.classList.add('event');
-			dates[entryDate] = eventData;
+		promises[i] = getEventData(eventPath);
+		
+		// let eventData = await getEventData(eventPath);
+		// if(eventData) {
+		// 	entry.classList.add('event');
+		// 	dates[entryDate] = eventData;
 			
-			let listDate = document.createElement('div');
-			listDate.textContent = entryDate.toDateString();
-			eventFullList.appendChild(listDate);
+		// 	let listDate = document.createElement('div');
+		// 	listDate.textContent = entryDate.toDateString();
+		// 	eventFullList.appendChild(listDate);
 			
-			let dateIcons = document.createElement('div');
-			dateIcons.classList.add('icons');
-			entry.appendChild(dateIcons);
+		// 	let dateIcons = document.createElement('div');
+		// 	dateIcons.classList.add('icons');
+		// 	entry.appendChild(dateIcons);
 			
-			let iconPriority = 0;
-			for(let i = 0; i < dates[entryDate].events.length; i++) {
-				let listEvent = document.createElement('li');
-				let a = document.createElement('a');
-				if(dates[entryDate].events[i].title) { a.textContent = dates[entryDate].events[i].title; }
-				else { a.textContent = "(title not provided)"; }
-				a.href = "javascript:void(0)";
-				listEvent.appendChild(a);
+		// 	let iconPriority = 0;
+		// 	for(let i = 0; i < dates[entryDate].events.length; i++) {
+		// 		let listEvent = document.createElement('li');
+		// 		let a = document.createElement('a');
+		// 		if(dates[entryDate].events[i].title) { a.textContent = dates[entryDate].events[i].title; }
+		// 		else { a.textContent = "(title not provided)"; }
+		// 		a.href = "javascript:void(0)";
+		// 		listEvent.appendChild(a);
 				
-				listEvent.addEventListener('click', () => {
-					displayEvent(dates[entryDate].events[i]);
-				});
+		// 		listEvent.addEventListener('click', () => {
+		// 			displayEvent(dates[entryDate].events[i]);
+		// 		});
 				
-				eventFullList.appendChild(listEvent);
+		// 		eventFullList.appendChild(listEvent);
 				
-				if(dates[entryDate].events[i].icon && dates[entryDate].events[i].icon_priority >= iconPriority) {
-					if(dates[entryDate].events[i].icon_priority > iconPriority) {
-						dateIcons.replaceChildren();
-						iconPriority = dates[entryDate].events[i].icon_priority;
+		// 		if(dates[entryDate].events[i].icon && dates[entryDate].events[i].icon_priority >= iconPriority) {
+		// 			if(dates[entryDate].events[i].icon_priority > iconPriority) {
+		// 				dateIcons.replaceChildren();
+		// 				iconPriority = dates[entryDate].events[i].icon_priority;
+		// 			}
+		// 			let icon = document.createElement('img');
+		// 			icon.src = `events/icons/${dates[entryDate].events[i].icon}`;
+		// 			icon.classList.add('icon');
+		// 			dateIcons.appendChild(icon);
+		// 		}
+		// 	}
+		// }
+	}
+	
+	Promise.all(promises).then((events) => {
+		for(let i = 0; i < events.length; i++) {
+			const eventData = events[i];
+			const entry = calendarDates.childNodes[i];
+			const entryDay = parseInt(entry.getAttribute('day'), 10);
+			const entryMonth = parseInt(entry.getAttribute('month'), 10);
+			const entryYear = parseInt(entry.getAttribute('year'), 10);
+			const entryDate = new Date(entryYear, entryMonth, entryDay);
+			if(eventData) {
+				entry.classList.add('event');
+				dates[entryDate] = eventData;
+				
+				let listDate = document.createElement('div');
+				listDate.textContent = entryDate.toDateString();
+				eventFullList.appendChild(listDate);
+				
+				let dateIcons = document.createElement('div');
+				dateIcons.classList.add('icons');
+				entry.appendChild(dateIcons);
+				
+				let iconPriority = 0;
+				for(let i = 0; i < dates[entryDate].events.length; i++) {
+					let listEvent = document.createElement('li');
+					let a = document.createElement('a');
+					if(dates[entryDate].events[i].title) { a.textContent = dates[entryDate].events[i].title; }
+					else { a.textContent = "(title not provided)"; }
+					a.href = "javascript:void(0)";
+					listEvent.appendChild(a);
+					
+					listEvent.addEventListener('click', () => {
+						displayEvent(dates[entryDate].events[i]);
+					});
+					
+					eventFullList.appendChild(listEvent);
+					
+					if(dates[entryDate].events[i].icon && dates[entryDate].events[i].icon_priority >= iconPriority) {
+						if(dates[entryDate].events[i].icon_priority > iconPriority) {
+							dateIcons.replaceChildren();
+							iconPriority = dates[entryDate].events[i].icon_priority;
+						}
+						let icon = document.createElement('img');
+						icon.src = `events/icons/${dates[entryDate].events[i].icon}`;
+						icon.classList.add('icon');
+						dateIcons.appendChild(icon);
 					}
-					let icon = document.createElement('img');
-					icon.src = `events/icons/${dates[entryDate].events[i].icon}`;
-					icon.classList.add('icon');
-					dateIcons.appendChild(icon);
 				}
 			}
 		}
-	}
+	});
 	
 	displayEventFullList();
 }
