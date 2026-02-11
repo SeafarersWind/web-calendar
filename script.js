@@ -233,9 +233,9 @@ async function getEventData(eventPath) {
 		return json;
 	})
 	.catch(function (err) {
-		if(!err instanceof TypeError || err.message != "NetworkError when attempting to fetch resource.") {
-			console.error(err);
-		}
+		// if(!err instanceof TypeError || err.message != "NetworkError when attempting to fetch resource.") {
+		// 	console.error(err);
+		// }
 		
 		return false;
 	})
