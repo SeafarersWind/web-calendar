@@ -36,19 +36,56 @@ createTables()
 
 
 
-// requests
-server.get("/abc", (req, res) => {
-  console.log("abc!")
-
-  res.send("Thank you for abc.")
-})
-
+// user requests
 server.get("/events/:startDate&:endDate", (req, res) => {
   console.log(`GET /events/${req.params.startDate}&${req.params.endDate}`)
   const statement = db.prepare("SELECT * FROM events WHERE date BETWEEN ? AND ?")
   const events = statement.all(req.params.startDate, req.params.endDate)
 
   res.send({events})
+})
+
+
+
+// admin requests
+server.get("/admin", (req, res) => {
+	// adds admin controls on the main page
+})
+
+server.get("/dashboard", (req, res) => {
+	// returns a page to view all events on
+})
+
+server.get("/create-event", (req, res) => {
+	// returns a page with a form for creating an event
+})
+
+server.get("/edit-event", (req, res) => {
+	// returns a page with a form for editing an event
+})
+
+server.post("/create-event", (req, res) => {
+	// creates an event
+})
+
+server.post("/edit-event", (req, res) => {
+	// edits an event
+})
+
+server.post("/delete-event", (req, res) => {
+	// deletes an event
+})
+
+server.get("/get-icons", (req, res) => {
+	// returns all the icons in the server
+})
+
+server.post("/upload-icon", (req, res) => {
+	// uploads an icon to the server
+})
+
+server.post("/delete-icon", (req, res) => {
+	// deletes an icon from the server
 })
 
 
