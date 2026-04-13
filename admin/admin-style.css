@@ -1,0 +1,141 @@
+body {
+	margin: var(--margin);
+	min-height: fit-content;
+	height: calc(100vh - calc(var(--margin) + var(--margin)));
+	width: calc(100vw - calc(var(--margin) + var(--margin)));
+	display: flex;
+	flex-direction: row;
+	overflow-x: hidden;
+	
+	font-size: 1.15rem;
+	font-family: Arial, sans-serif;
+
+	background-color: var(--bg);
+	color: var(--fg);
+
+	--bg: #301900;
+	--fg: #fe8;
+	--margin: 0;
+}
+
+main {
+	margin: auto;
+	margin-top: 2rem;
+}
+
+a:link { color: #4CF; }
+a:visited { color: #4CF; }
+a:hover { color: #4CF; }
+a:active { color: #4CF; } 
+
+
+
+
+
+
+fieldset {
+	padding: 1rem;
+
+	.line {
+		display: flex;
+	}
+
+	span:not(:last-child) {
+		margin-right: .75rem;
+	}
+
+	label {
+		display: block;
+
+		font-size: .8rem;
+	}
+
+	label input {
+		aspect-ratio: 1 / 1;
+		height: 100%;
+		margin: -100% .25rem 0 0;
+	}
+
+	input:not([type=checkbox]), textarea {
+		display: inline-block;
+		box-sizing: border-box;
+		width: 100%;
+		margin-bottom: .5rem;
+	} input[type=text], input[type=date], input[type=time], input[type=number] {
+		font-size: 1rem;
+	} input.title {
+		font-size: 1.5rem; padding: 0.4rem;
+	} input[type=number] {
+		width: 3rem;
+	} textarea {
+		width: 100%;
+		padding: .5rem;
+
+		font-family: inherit;
+		font-size: 1rem;
+	}
+
+	input.inactive:not([type=file]) {
+		background-color: #999;
+		color: #666;
+		pointer-events: none;
+	} input.inactive[type=file] {
+		pointer-events: none;
+	}
+
+
+	input[type=submit] {
+		width: 5rem;
+		margin-top: 1.5rem;
+	}
+}
+
+
+
+#calendar-container {
+	width: 40%;
+	min-width: 400px;
+	min-height: fit-content;
+	
+	overflow: auto;
+	
+	background-color: var(--bg);
+	color: var(--fg);
+	
+	--bg: #010;
+	--fg: #fff;
+	
+	--title: #fff;
+	
+	--calendar_bg: #021;
+	--calendar_fg: #fff;
+	--calendar_border: #cfc;
+	--week_bg: #032;
+	--week_fg: #fff;
+	--other_month_date_fg: #777;
+	--current_date_bg: #064;
+	--current_date_fg: #fff;
+	--hover_date_bg: #042;
+	--hover_date_fg: #fff;
+	--event-date-bg: #045;
+	--event-date-fg: #fff;
+}
+
+#event-container {
+	position: relative;
+	width: 60%;
+	min-height: 100%;
+	padding: 0 1rem;
+	
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	
+	overflow: auto;
+	
+	background-color: var(--bg);
+	color: var(--fg);
+	
+	--bg: #100;
+	--fg: #fff;
+}

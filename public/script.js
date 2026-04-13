@@ -284,8 +284,27 @@ function dateTitle(date) {
 
 
 
+async function checkAdmin() {
+  return await fetch(`/admin`)
+  .then(response => {
+    if(!response.ok) { throw new Error("HTTP error " + response.status) }
+    return response.json()
+  })
+  .then(json => {
+    return json
+  })
+  .catch(function (err) {
+    console.error(err)
+  })
+}
 
 
+
+
+
+
+const isAdmin = await checkAdmin()
+console.log(isAdmin)
 
 renderCalendar(currentMonth, currentYear)
 getEvents(firstDate, lastDate)

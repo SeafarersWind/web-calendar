@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Calendar</title>
+	<link href="admin-style.css" rel="stylesheet">
+</head>
+
+
+
+<body>
+	<main>
+		<form method="post" enctype="multipart/form-data" action="create-event">
+			<fieldset>
+				<legend>Create a new event</legend>
+				<label for="event_title">Title</label>
+				<input type="text" name="title" id="event_title" class="title" required>
+				<div class="line">
+					<span style="margin-right: 1.4rem;">
+						<label for="event_date">Date</label>
+						<input type="date" name="date" id="event_date" required>
+					</span>
+					<span style="margin-right: .4rem">
+						<label for="event_time_start"><input type="checkbox" checked>Start Time</label>
+						<input type="time" name="time_start" id="event_time_start">
+					</span>
+					<span>
+						<label for="event_time_end"><input type="checkbox" checked>End Time</label>
+						<input type="time" name="time_end" id="event_time_end">
+					</span>
+				</div>
+				<div class="line">
+					<span>
+						<label for="event_address"><input type="checkbox" checked>Address</label>
+						<input type="text" name="address" id="event_address">
+					</span>
+					<span>
+						<label for="event_location"><input type="checkbox" checked>Name of Location</label>
+						<input type="text" name="location" id="event_location">
+					</span>
+				</div>
+				<span>
+					<label for="event_image"><input type="checkbox" checked>Image</label>
+					<input type="file" name="image" id="event_image">
+				</span>
+				<label for="event_body">Body <small>(supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">markdown formatting</a>)</small></label>
+				<textarea name="body" id="event_body" style="min-width: 35rem; min-height: 15rem;" required></textarea>
+				<div class="line">
+					<span>
+						<label for="event_icon"><input type="checkbox" checked>Icon</label>
+						<input type="text" name="icon" id="event_icon">
+					</span>
+					<span>
+						<label for="event_icon_priority">Icon Priority</label>
+						<input type="number" name="icon_priority" id="event_icon_priority">
+					</span>
+				</div>
+				<input type="submit" value="Publish">
+			</fieldset>
+		</form>
+	</main>
+
+	<script src="create-event.js"></script>
+</body>
+
+
+
+</html>
