@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Calendar Dashboard</title>
+	<link href="admin-style.css" rel="stylesheet">
+</head>
+
+
+
+<div style="display:none;">
+	<div id="event-menu"
+		><button id="view-button">View on Calendar</button
+		><button id="edit-button">Edit</button
+		><button id="delete-button">Delete</button>
+	</div>
+</div>
+
+
+
+<body>
+	<div id="dashboard-container">
+		<h1>Admin Dashboard</h1>
+
+		<main>
+			<button>Create New Event</button>
+			<button>Delete Events</button>
+
+			<h2>Event List</h2>
+			<li id="event-list">
+			</li>
+		</main>
+	</div>
+
+	<div id="event-container">
+		<h1 id="event-title"></h1>
+		<img id="event-image">
+		<article id="event-info"></article>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+	<script src="/purify.min.js"></script>
+
+	<script src="dashboard.js"></script>
+</body>
+
+
+
+</html>

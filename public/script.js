@@ -118,7 +118,7 @@ function renderEvent(date) {
           iconPriority = events[i].icon_priority
         }
         let icon = document.createElement('img')
-        icon.src = `events/icons/${events[i].icon}`
+        icon.src = `/icons/${events[i].icon}`
         icon.classList.add('icon')
         dateIcons.appendChild(icon)
       }
@@ -228,7 +228,7 @@ function displayEvent(event) {
 
   if(event.image) {
     eventImage.style.display = 'block'
-    eventImage.src = `events/images/${event.image}`
+    eventImage.src = `/images/${event.image}`
   }
 
   if(event.body) { eventInfo.innerHTML = DOMPurify.sanitize(marked.parse(event.body)) }
@@ -285,7 +285,7 @@ function dateTitle(date) {
 
 
 async function checkAdmin() {
-  return await fetch(`/admin`)
+  await fetch(`/isadmin`)
   .then(response => {
     if(!response.ok) { throw new Error("HTTP error " + response.status) }
     return response.json()

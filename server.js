@@ -11,11 +11,11 @@ const marked = require("marked")
 const server = express()
 
 server.use(express.static(path.join(__dirname, "public"), {
-	extensions: ['html', 'htm']
+  extensions: ['html', 'htm']
 }))
 
 server.use("/admin", express.static(__dirname + "/admin", {
-	extensions: ['html', 'htm']
+  extensions: ['html', 'htm']
 }))
 
 
@@ -26,7 +26,7 @@ const createTables = db.transaction(() => {
     `
     CREATE TABLE IF NOT EXISTS events (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    date TEXT NOT NULL,
+    date INTEGER NOT NULL,
     title TEXT NOT NULL,
     image TEXT,
     body TEXT NOT NULL,
@@ -48,7 +48,7 @@ createTables()
 const upload = multer({
   dest: path.join(__dirname, "images"),
   limits: {
-  	fileSize: 100 * 1000000 // 100 MB
+    fileSize: 100 * 1000000 // 100 MB
   }
 })
 
@@ -83,8 +83,8 @@ server.get("/:universalURL", (req, res) => {
 // user requests
 server.get("/events/:startDate&:endDate", (req, res) => {
   // console.log(`GET /events/${req.params.startDate}&${req.params.endDate}`)
-  const statement = db.prepare("SELECT * FROM events WHERE date BETWEEN ? AND ?")
-  const events = statement.all(req.params.startDate, req.params.endDate)
+  const events = db.prepare("SELECT * FROM events WHERE date BETWEEN ? AND ?")
+    .all(req.params.startDate, req.params.endDate)
 
   res.send({events})
 })
@@ -92,18 +92,17 @@ server.get("/events/:startDate&:endDate", (req, res) => {
 
 
 // admin requests
-server.get("/admin", (req, res) => {
-	// adds admin controls on the main page
-	console.log("admin")
-	res.send(true)
+server.get("/isadmin", (req, res) => {
+  // adds admin controls on the main page
+  console.log("admin")
+  res.send(true)
 })
 
-server.get("/dashboard", (req, res) => {
-	// returns a page to view all events on
-})
+server.get("/admin/dashboard/events", (req, res) => {
+  const events = db.prepare("SELECT * FROM events ORDER BY date DESC, id DESC")
+    .all()
 
-server.get("/edit-event", (req, res) => {
-	// returns a page with a form for editing an event
+  res.send({events})
 })
 
 server.post("/admin/create-event", upload.single("image"), (req, res) => {
@@ -114,6 +113,8 @@ server.post("/admin/create-event", upload.single("image"), (req, res) => {
 
   const eventId = db.prepare(`SELECT seq FROM SQLITE_SEQUENCE WHERE name = 'events'`).get().seq + 1
   const imageName = req.file ? `${eventId}${path.extname(req.file.originalname).toLowerCase()}` : null
+
+console.log(form)
 
   db.prepare(`
     INSERT INTO events
@@ -132,32 +133,32 @@ server.post("/admin/create-event", upload.single("image"), (req, res) => {
   )
 
   if(req.file) {
-  	fs.rename(req.file.path, path.join(__dirname, "public/images/", imageName), err => {
+    fs.rename(req.file.path, path.join(__dirname, "public/images/", imageName), err => {
       if (err) return handleError(err, res)
     });
   }
 
-	res.status(200)
+  res.status(200)
 })
 
 server.post("/edit-event", (req, res) => {
-	// edits an event
+  // edits an event
 })
 
 server.post("/delete-event", (req, res) => {
-	// deletes an event
+  // deletes an event
 })
 
 server.get("/get-icons", (req, res) => {
-	// returns all the icons in the server
+  // returns all the icons in the server
 })
 
 server.post("/upload-icon", (req, res) => {
-	// uploads an icon to the server
+  // uploads an icon to the server
 })
 
 server.post("/delete-icon", (req, res) => {
-	// deletes an icon from the server
+  // deletes an icon from the server
 })
 
 
