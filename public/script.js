@@ -15,6 +15,7 @@ const closeButton = document.getElementById('close-button')
 let currentDate = new Date()
 let currentMonth = currentDate.getMonth()
 let currentYear = currentDate.getFullYear()
+let currentEvent = -1
 
 let firstDate
 let lastDate
@@ -183,7 +184,6 @@ async function getEvents(startDate, endDate) {
   }
 
   renderEventList()
-  displayEventFullList()
 }
 
 async function getEventData(startDate, endDate) {
@@ -284,8 +284,27 @@ function dateTitle(date) {
 
 
 
+async function preloadEvent(eventId) {
+  await fetch(`/event/${eventId}`)
+  .then(response => {
+    if(!response.ok) { throw new Error("HTTP error " + response.status) }
+    return response.json()
+  })
+  .then(event => {
+    const eventDate = new Date(event.date * (1000*3600*24))
+    currentMonth = eventDate.getUTCMonth()
+    currentYear = eventDate.getUTCFullYear()
+    currentEvent = event
+  })
+  .catch(function (err) {
+    console.error(err)
+  })
+}
+
+
+
 async function checkAdmin() {
-  await fetch(`/isadmin`)
+  return await fetch('/isadmin')
   .then(response => {
     if(!response.ok) { throw new Error("HTTP error " + response.status) }
     return response.json()
@@ -304,11 +323,24 @@ async function checkAdmin() {
 
 
 const isAdmin = await checkAdmin()
-console.log(isAdmin)
+
+let urlParams = new URLSearchParams(window.location.search.substring(1))
+if(urlParams.get('e')) {
+  await preloadEvent(urlParams.get('e'))
+}
+console.log(currentEvent)
 
 renderCalendar(currentMonth, currentYear)
-getEvents(firstDate, lastDate)
-getEvents(firstDate - 60, lastDate + 60)
+getEvents(firstDate, lastDate).then(() => {
+  if(currentEvent == -1) {
+    displayEventFullList()
+  } else {
+    displayEvent(currentEvent)
+  }
+
+  getEvents(firstDate - 60, lastDate + 60)
+})
+
 
 
 
@@ -320,6 +352,7 @@ prevMonthBtn.addEventListener('click', () => {
   }
   renderCalendar(currentMonth, currentYear)
   getEvents(firstDate, lastDate)
+  .then(displayEventFullList())
 })
 
 nextMonthBtn.addEventListener('click', () => {
@@ -330,6 +363,7 @@ nextMonthBtn.addEventListener('click', () => {
   }
   renderCalendar(currentMonth, currentYear)
   getEvents(firstDate, lastDate)
+  .then(displayEventFullList())
 })
 
 calendarDates.addEventListener('click', (e) => {

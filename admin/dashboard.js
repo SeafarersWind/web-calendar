@@ -64,3 +64,20 @@ getEvents()
 viewButton.addEventListener('click', (e) => {
   window.location.href = `/?e=${currentEventId}`
 })
+
+editButton.addEventListener('click', (e) => {
+  window.location.href = `/admin/edit-event/${currentEventId}`
+})
+
+deleteButton.addEventListener('click', (e) => {
+  fetch(`delete/${currentEventId}`, {
+    method: "POST",
+    redirect: 'follow'
+  })
+  .then(response => {
+      window.location.href = response.url
+  })
+  .catch(function(err) {
+      console.info(err + " url: " + url);
+  });
+})

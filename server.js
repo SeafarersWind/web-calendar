@@ -74,10 +74,6 @@ const handleError = (err, res) => {
     .end("Oops! Something went wrong!");
 }
 
-server.get("/:universalURL", (req, res) => {
-   res.send("404: Url not found")
-})
-
 
 
 // user requests
@@ -87,6 +83,14 @@ server.get("/events/:startDate&:endDate", (req, res) => {
     .all(req.params.startDate, req.params.endDate)
 
   res.send({events})
+})
+
+server.get("/event/:id", (req, res) => {
+  // console.log(`GET /event/${req.params.id}`)
+  const event = db.prepare("SELECT * FROM events WHERE id = ?")
+    .get(req.params.id)
+
+  res.send(event)
 })
 
 
@@ -145,8 +149,11 @@ server.post("/edit-event", (req, res) => {
   // edits an event
 })
 
-server.post("/delete-event", (req, res) => {
-  // deletes an event
+server.post("/admin/delete/:id", (req, res) => {
+  db.prepare(`DELETE FROM events WHERE id = ?`)
+  .run(req.params.id)
+
+  res.redirect("/admin/dashboard")
 })
 
 server.get("/get-icons", (req, res) => {
