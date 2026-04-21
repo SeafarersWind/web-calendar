@@ -9,6 +9,7 @@ function updateCheckbox(checkbox) {
   if(checkbox.checked) {
     field.removeAttribute('disabled')
     field.setAttribute('required', '')
+  	console.log(field)
     if(field.id == 'event_icon') {
       extraField = document.getElementById('event_icon_priority')
       extraField.removeAttribute('disabled')
@@ -31,7 +32,6 @@ async function sendData() {
   var data = {}
 
   for(const entry of formData.entries()) {
-    console.log(entry)
     if(entry[0] != 'image' && entry[0] != 'date') { data[entry[0]] = entry[1] }
     else if(entry[0] == 'image') {
       data['image'] = true
@@ -77,7 +77,6 @@ for(const checkbox of checkboxes) {
 
 form.addEventListener("submit", (e) => {
   event.preventDefault()
-  console.log(e)
 
   const formData = new FormData(form)
   const dateStr = formData.get('date')
@@ -92,6 +91,13 @@ form.addEventListener("submit", (e) => {
 
   fetch('', {
       method: "POST",
-      body: formData
-  });
-});
+      body: formData,
+      redirect: 'follow'
+  })
+  .then(response => {
+      window.location.href = response.url
+  })
+  .catch(function(err) {
+      console.info(err + " url: " + url);
+  })
+})

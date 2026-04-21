@@ -6,7 +6,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Create New Event</title>
+	<title>Edit an Event</title>
 	<link href="admin-style.css" rel="stylesheet">
 </head>
 
@@ -14,9 +14,9 @@
 
 <body>
 	<main>
-		<form method="post" enctype="multipart/form-data" action="create-event">
+		<form method="post" enctype="multipart/form-data" action="edit-event">
 			<fieldset class="create-event">
-				<legend>Create a new event</legend>
+				<legend>Edit an Event</legend>
 				<label for="event_title">Title</label>
 				<input type="text" name="title" id="event_title" class="title" required>
 				<div class="line">
@@ -45,7 +45,8 @@
 				</div>
 				<span>
 					<label for="event_image"><input type="checkbox" checked>Image</label>
-					<input type="file" name="image" id="event_image">
+					<input type="file" name="image" id="event_image"
+					><label for="event_image" class="file-info hidden" id="event_image_extra">(keep original image)</label>
 				</span>
 				<label for="event_body">Body <small>(supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">markdown formatting</a>)</small></label>
 				<textarea name="body" id="event_body" style="min-width: 35rem; min-height: 15rem;" required></textarea>
@@ -64,7 +65,7 @@
 		</form>
 	</main>
 
-	<script src="create-event.js"></script>
+	<script src="edit-event.js"></script>
 </body>
 
 

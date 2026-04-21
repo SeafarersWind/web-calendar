@@ -179,6 +179,10 @@ fieldset.create-event {
 		font-size: 1rem;
 	} input.title {
 		font-size: 1.5rem; padding: 0.4rem;
+	} input[type=file] {
+		width: 12rem;
+	} input[type=file].short {
+		width: 4.1rem;
 	} input[type=number] {
 		width: 3rem;
 	} textarea {
@@ -201,6 +205,18 @@ fieldset.create-event {
 	input[type=submit] {
 		width: 5rem;
 		margin-top: 1.5rem;
+	}
+
+
+	.file-info {
+	  display: inline-block;
+	  margin-left: .25rem;
+
+	  font-size: .85rem;
+	}
+
+	.hidden {
+		display: none;
 	}
 }
 

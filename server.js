@@ -118,7 +118,7 @@ server.post("/admin/create-event", upload.single("image"), (req, res) => {
   const eventId = db.prepare(`SELECT seq FROM SQLITE_SEQUENCE WHERE name = 'events'`).get().seq + 1
   const imageName = req.file ? `${eventId}${path.extname(req.file.originalname).toLowerCase()}` : null
 
-console.log(form)
+  console.log(form)
 
   db.prepare(`
     INSERT INTO events
@@ -142,16 +142,70 @@ console.log(form)
     });
   }
 
-  res.status(200)
+  res.redirect(`/?e=${eventId}`)
 })
 
-server.post("/edit-event", (req, res) => {
+server.post("/admin/edit-event", upload.single("image"), (req, res) => {
   // edits an event
+  console.log("POST edit-event")
+
+  const form = req.body
+
+  const eventId = req.query.e
+
+  const oldImageName = db.prepare(`SELECT image FROM events WHERE id = ?`).get(eventId).image
+  const imageName = req.file ?
+    `${eventId}${path.extname(req.file.originalname).toLowerCase()}` :
+    (form.image ? oldImageName : null)
+
+  console.log(eventId)
+  console.log(req.body)
+  console.log(oldImageName)
+  console.log(imageName)
+
+  db.prepare(`
+    UPDATE events
+    SET date = ?, title = ?, body = ?, image = ?, time_start = ?, time_end = ?, address = ?, icon = ?, icon_priority = ?
+    WHERE id = ?
+  `).run(
+    form.date,
+    form.title,
+    form.body,
+    imageName,
+    form.time_start ? form.time_start : null,
+    form.time_end ? form.time_end : null,
+    form.address ? form.address : null,
+    form.icon ? form.icon : null,
+    form.icon_priority ? form.icon_priority : null,
+    eventId
+  )
+
+  if(req.file) {
+    if(oldImageName) {
+      fs.unlink(path.join(__dirname, "public/images/", oldImageName), err => {
+        if (err) return handleError(err, res)
+      })
+    }
+
+    fs.rename(req.file.path, path.join(__dirname, "public/images/", imageName), err => {
+      if (err) return handleError(err, res)
+    });
+  }
+
+  res.redirect(`/?e=${eventId}`)
 })
 
 server.post("/admin/delete/:id", (req, res) => {
+  imageName = db.prepare(`SELECT image FROM events WHERE id = ?`).get(req.params.id).image
+
   db.prepare(`DELETE FROM events WHERE id = ?`)
   .run(req.params.id)
+
+  if(imageName) {
+    fs.unlink(path.join(__dirname, "public/images/", imageName), err => {
+        if (err) return handleError(err, res)
+    })
+  }
 
   res.redirect("/admin/dashboard")
 })

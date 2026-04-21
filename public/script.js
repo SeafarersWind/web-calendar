@@ -119,7 +119,7 @@ function renderEvent(date) {
           iconPriority = events[i].icon_priority
         }
         let icon = document.createElement('img')
-        icon.src = `/icons/${events[i].icon}`
+        icon.src = `/icons/${events[i].icon}.png`
         icon.classList.add('icon')
         dateIcons.appendChild(icon)
       }

@@ -66,7 +66,7 @@ viewButton.addEventListener('click', (e) => {
 })
 
 editButton.addEventListener('click', (e) => {
-  window.location.href = `/admin/edit-event/${currentEventId}`
+  window.location.href = `/admin/edit-event/?e=${currentEventId}`
 })
 
 deleteButton.addEventListener('click', (e) => {
@@ -79,5 +79,5 @@ deleteButton.addEventListener('click', (e) => {
   })
   .catch(function(err) {
       console.info(err + " url: " + url);
-  });
+  })
 })
