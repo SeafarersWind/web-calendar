@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calendar Dashboard - Admin</title>
+    <link href="admin-style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css">
+    <style>
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .logout-btn {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .logout-btn:hover {
+            opacity: 0.8;
+        }
+
+        #create-event-btn {
+            background: #fe8;
+            color: #301900;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="auth.js"></script>
+    <div id="dashboard-container">
+        <div class="header-actions">
+            <h1 style="margin:0;">Admin</h1>
+            <button class="logout-btn" onclick="auth.logout()">Logout</button>
+        </div>
+
+        <main>
+            <button id="create-event-btn" onclick="window.location.href='create-event.html'">+ Create New Event</button>
+
+            <h2 style="margin-top: 1rem; padding-left: 1rem;">Event List</h2>
+            <li id="event-list" style="list-style: none;">
+            </li>
+        </main>
+    </div>
+
+    <div id="event-container">
+        <h1 id="event-title"></h1>
+        <img id="event-image" style="max-width: 100%; border-radius: 12px; margin-bottom: 1rem; display: none;">
+        <article id="event-info"></article>
+    </div>
+
+    <div id="holding-area" style="display:none;">
+        <div id="event-menu">
+            <button id="view-button">View on Calendar</button>
+            <button id="edit-button">Edit</button>
+            <button id="delete-button">Delete</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <script src="/purify.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
