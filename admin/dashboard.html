@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Calendar | Admin Dashboard</title>
+    <!-- Font Awesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="admin-style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+</head>
+
+<body>
+    <script src="auth.js"></script>
+    
+    <aside id="dashboard-container">
+        <div class="header-actions">
+            <h1><i class="fa-solid fa-calendar-days"></i> Admin</h1>
+        </div>
+
+        <button id="create-event-btn" onclick="window.location.href='create-event.html'">
+            <i class="fa-solid fa-plus"></i> New Event
+        </button>
+
+        <h2>Recent Events</h2>
+        <nav id="event-list">
+            <!-- Events will be rendered here -->
+        </nav>
+
+        <button class="logout-btn" onclick="auth.logout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+    </aside>
+
+    <main id="event-container">
+        <!-- Default State -->
+        <div id="no-event-selected" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--fg-dim);">
+            <i class="fa-solid fa-hand-pointer" style="font-size: 4rem; opacity: 0.2; margin-bottom: 1.5rem;"></i>
+            <p style="font-size: 1.2rem; font-weight: 300;">Select an event to view details</p>
+        </div>
+
+        <!-- Event Detail View (Initially hidden) -->
+        <div id="event-detail-content" style="display: none;">
+            <header id="detail-header" style="margin-bottom: 2rem;">
+                <h1 id="event-title"></h1>
+                <div id="event-meta" style="display: flex; gap: 2rem; color: var(--fg-dim); font-size: 0.9rem;">
+                   <span id="meta-date"><i class="fa-regular fa-calendar"></i> <span></span></span>
+                   <span id="meta-time"><i class="fa-regular fa-clock"></i> <span></span></span>
+                   <span id="meta-location"><i class="fa-solid fa-location-dot"></i> <span></span></span>
+                </div>
+            </header>
+
+            <img id="event-image" src="" style="display: none;">
+            
+            <article id="event-info"></article>
+            
+            <div id="holding-area" style="display:none;">
+                <div id="event-menu">
+                    <button id="view-button" class="action-btn"><i class="fa-solid fa-eye"></i> View on Site</button>
+                    <button id="edit-button" class="action-btn"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                    <button id="delete-button" class="action-btn"><i class="fa-solid fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <script src="/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

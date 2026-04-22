@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Calendar | Events</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <aside id="calendar-container">
+        <h1>Events Calendar</h1>
+        
+        <div class="calendar">
+            <div class="calendar-header">
+                <button id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+                <div id="month-year"></div>
+                <button id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="calendar-body">
+                <div class="calendar-weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="calendar-dates">
+                    <!-- Dates will be dynamically injected here -->
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: auto; text-align: center; padding-top: 2rem;">
+            <a href="/admin/login.html" style="color: var(--fg-dim); text-decoration: none; font-size: 0.8rem; opacity: 0.5;">
+                <i class="fa-solid fa-lock"></i> Admin Portal
+            </a>
+        </div>
+    </aside>
+    
+    <main id="event-container">
+        <!-- Default State -->
+        <div id="no-event-selected" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--fg-dim);">
+            <i class="fa-solid fa-calendar-star" style="font-size: 5rem; opacity: 0.1; margin-bottom: 2rem;"></i>
+            <h2 style="font-weight: 300; letter-spacing: 1px;">Discover Upcoming Events</h2>
+            <p style="opacity: 0.6; margin-top: 0.5rem;">Select a date with a marker to see what's happening.</p>
+        </div>
+
+        <!-- Event Detail Content -->
+        <div id="event-detail-view" style="display: none;">
+            <div id="top-bar" style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+                <div id="close-button" onclick="closeDetails()"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+
+            <header style="margin-bottom: 3rem;">
+                <h1 id="event-title"></h1>
+                <div id="event-meta" style="display: flex; gap: 2.5rem; color: var(--fg-dim); margin-top: 1rem; font-size: 1rem;">
+                    <span id="detail-date"><i class="fa-regular fa-calendar-check" style="color: var(--accent); margin-right: 8px;"></i> <span></span></span>
+                    <span id="detail-location"><i class="fa-solid fa-location-dot" style="color: var(--accent); margin-right: 8px;"></i> <span></span></span>
+                </div>
+            </header>
+
+            <img id="event-image" src="" style="display: none;">
+            
+            <article id="event-info" class="fade-in"></article>
+            
+            <section id="event-list-section" style="margin-top: 4rem;">
+                <h3 style="margin-bottom: 1.5rem; color: var(--fg-dim); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Events on this day</h3>
+                <div id="event-list" class="list"></div>
+            </section>
+        </div>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <script src="/purify.min.js"></script>
+
+    <script type="module" src="script.js"></script>
+    <script>
+        // Helper to handle client-side view toggling
+        function closeDetails() {
+            document.getElementById('event-detail-view').style.display = 'none';
+            document.getElementById('no-event-selected').style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>

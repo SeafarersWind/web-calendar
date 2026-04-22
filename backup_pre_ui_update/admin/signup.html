@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Signup - Web Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #fe8;
+            --primary-glow: rgba(254, 238, 136, 0.3);
+            --bg: #1a0f00;
+            --card-bg: rgba(48, 25, 0, 0.8);
+            --text: #fff;
+            --success: #4dff88;
+            --error: #ff4d4d;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at center, #301900 0%, #1a0f00 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(254, 238, 136, 0.1);
+            padding: 3rem;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--primary);
+            opacity: 0.8;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: #1a0f00;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #message {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .error { color: var(--error); }
+        .success { color: var(--success); }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>Create Admin</h1>
+        <p class="subtitle">Join the calendar management team</p>
+        <form id="signup-form">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required placeholder="Choose a username">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Choose a password">
+            </div>
+            <button type="submit">Sign Up</button>
+            <p id="message"></p>
+        </form>
+        <div class="footer">
+            Already have an account? <a href="login.html">Log in</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageElement = document.getElementById('message');
+
+            try {
+                const response = await fetch('/admin/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageElement.textContent = 'Account created! Redirecting to login...';
+                    messageElement.className = 'success';
+                    messageElement.style.display = 'block';
+                    setTimeout(() => window.location.href = 'login.html', 1500);
+                } else {
+                    messageElement.textContent = data.error || 'Signup failed';
+                    messageElement.className = 'error';
+                    messageElement.style.display = 'block';
+                }
+            } catch (error) {
+                messageElement.textContent = 'Server connection error';
+                messageElement.className = 'error';
+                messageElement.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

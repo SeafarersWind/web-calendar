@@ -1,0 +1,364 @@
+body {
+	margin: 0;
+	min-height: fit-content;
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: row;
+	overflow-x: hidden;
+	
+	font-family: Arial, sans-serif;
+}
+
+a:link { color: #4CF; }
+a:visited { color: #4CF; }
+a:hover { color: #4CF; }
+a:active { color: #4CF; } 
+
+
+
+#calendar-container {
+	width: 40%;
+	min-width: 400px;
+	min-height: fit-content;
+	
+	overflow: auto;
+	
+	background-color: var(--bg);
+	color: var(--fg);
+	
+	--bg: #010;
+	--fg: #fff;
+	
+	--title: #fff;
+	
+	--calendar_bg: #021;
+	--calendar_fg: #fff;
+	--calendar_border: #cfc;
+	--week_bg: #032;
+	--week_fg: #fff;
+	--other_month_date_fg: #777;
+	--current_date_bg: #064;
+	--current_date_fg: #fff;
+	--hover_date_bg: #042;
+	--hover_date_fg: #fff;
+	--event-date-bg: #045;
+	--event-date-fg: #fff;
+}
+
+#event-container {
+	position: relative;
+	width: 60%;
+	min-height: 100%;
+	padding: 0 1rem;
+	
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	
+	overflow: auto;
+	
+	background-color: var(--bg);
+	color: var(--fg);
+	
+	--bg: #100;
+	--fg: #fff;
+}
+
+
+
+#calendar-container h1 {
+	color: var(--title);
+	margin: 1rem;
+	
+}
+
+
+
+.calendar {
+	max-width: 490px;
+	margin: auto;
+	margin-top: 40px;
+	background-color: var(--calendar_bg);
+	color: var(--calendar_fg);
+}
+
+.calendar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px;
+}
+
+.calendar-header button {
+	background-color: transparent;
+	color: var(--calendar_fg);
+	border: none;
+	font-size: 1.5em;
+	cursor: pointer;
+}
+
+#month-year {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.calendar-weekdays, .calendar-dates {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+}
+.calendar-weekdays div, .calendar-dates div {
+	text-align: center;
+}
+.calendar-weekdays div {
+	height: 40px;
+	line-height: 40px;
+	background-color: var(--week_bg);
+	color: var(--week_fg);
+	font-weight: bold;
+}
+
+
+
+.date {
+	position: relative;
+	height: 60px;
+	line-height: 60px;
+	border-bottom: 1px solid var(--calendar_border);
+	cursor: pointer;
+}
+
+.date.prev-month, .date.next-month {
+	color: var(--other_month_date_fg);
+}
+.date.event {
+	background-color: var(--event-date-bg);
+}
+.date.current-date {
+	background-color: var(--current_date_bg);
+	color: var(--current_date_fg);
+	border-radius: 8%;
+}
+.calendar-dates .date:hover {
+	background-color: var(--hover_date_bg);
+	color: var(--hover_date_fg);
+}
+
+
+
+
+.date .date-num {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	pointer-events: none;
+	z-index: 2;
+}
+
+.date .icons {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.date .icons .icon {
+	position: absolute;
+	max-width: 100%;
+	max-height: 100%;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+}
+
+/* One icon  */
+.date .icons .icon:first-child:nth-last-child(1) {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+/* Two icons  */
+.date .icons .icon:first-child:nth-last-child(2) {
+	left: 30%;
+	top: 35%;
+	max-width: 65%;
+	max-height: 65%;
+}
+.date .icons .icon:nth-child(2):nth-last-child(1) {
+	left: 70%;
+	top: 65%;
+	max-width: 65%;
+	max-height: 65%;
+}
+
+/* Three icons  */
+.date .icons .icon:first-child:nth-last-child(3) {
+	left: 45%;
+	top: 30%;
+	max-width: 65%;
+	max-height: 65%;
+}
+.date .icons .icon:nth-child(2):nth-last-child(2) {
+	left: 25%;
+	top: 70%;
+	max-width: 65%;
+	max-height: 65%;
+}
+.date .icons .icon:nth-child(3):nth-last-child(1) {
+	left: 70%;
+	top: 60%;
+	max-width: 65%;
+	max-height: 65%;
+}
+
+/* Four icons  */
+.date .icons .icon:first-child:nth-last-child(4) {
+	left: 0;
+	max-width: 50%;
+	max-height: 50%;
+}
+.date .icons .icon:nth-child(2):nth-last-child(3) {
+	left: 100%;
+	max-width: 50%;
+	max-height: 50%;
+}
+.date .icons .icon:nth-child(3):nth-last-child(2) {
+	left: 200%;
+	max-width: 50%;
+	max-height: 50%;
+}
+.date .icons .icon:nth-child(4):nth-last-child(1) {
+	left: 200%;
+	max-width: 50%;
+	max-height: 50%;
+}
+
+
+
+
+
+
+#event-image {
+	max-width: 80%;
+	max-height: 80%;
+}
+
+
+
+#event-info {
+	/*white-space: pre-wrap;*/
+}
+
+
+
+.list {
+	display: block;
+	margin-top: 2rem;
+	list-style-type: disc;
+	line-height: 2.0;
+	font-size: 1.3rem;
+}
+
+.list div {
+	margin-left: -1.5rem;
+	margin-top: 1em;
+}
+
+
+
+#top-bar {
+	position: absolute;
+	right: 4rem;
+	height: 100%;
+}
+
+#close-button {
+    --padding: 20%;
+    
+    display: none;
+    
+	position: sticky;
+	top: 2rem;
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	cursor: pointer;
+    background-image:
+        linear-gradient(90deg, transparent var(--padding), var(--fg) var(--padding), var(--fg) 40%, transparent 40%),
+        linear-gradient(90deg, transparent calc(var(--padding) + 5px), var(--fg) calc(var(--padding) + 3px), var(--fg) 40%, transparent 40%);
+    background-size:
+        26px 2px,
+        100% 2px;
+    background-position:
+        left 10px bottom calc(var(--padding) + 0.3%),
+        left top calc(var(--padding) + 3px);
+    background-repeat: no-repeat;
+}
+#close-button:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: calc(60% - var(--padding));
+    height: calc(100% - var(--padding)*2 - 3px);
+    left: 40%;
+    bottom: var(--padding);
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border: 2px solid var(--fg);
+    border-left: 0;
+    
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#close-button:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: calc(var(--padding) + 2px);
+    top: calc(var(--padding) - 5px);
+    width: 0; 
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent; 
+
+    border-right:10px solid var(--fg); 
+}
+
+
+@media (max-width: 800px) {
+	
+	body {
+		flex-direction: column;
+		height: fit-content;
+	}
+	
+	#calendar-container {
+		width: 100%;
+		overflow: visible;
+	}
+	
+	#event-container {
+		width: 100%;
+		min-height: 100vh;
+		overflow: visible;
+	}
+	
+	#top-bar {
+		right: 1rem;
+	}
+	
+	#close-button {
+		top: 1rem;
+	}
+	
+	#event-image {
+		max-width: 100%;
+		max-height: 100%;
+	}
+	
+}

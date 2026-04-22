@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Calendar | Manage Event</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="admin-style.css" rel="stylesheet">
+</head>
+
+<body style="display: block; padding: 2rem; overflow-y: auto;">
+    <script src="auth.js"></script>
+    
+    <div class="header-actions" style="max-width: 800px; margin: 0 auto 2rem auto;">
+        <a href="dashboard.html" class="action-btn edit" style="text-decoration: none;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <button class="logout-btn" onclick="auth.logout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+    </div>
+
+    <main class="create-event-container">
+        <form id="event-form">
+            <header style="margin-bottom: 2.5rem; text-align: center;">
+                <h1 id="page-title" style="margin-bottom: 0.5rem;">Create New Event</h1>
+                <p style="color: var(--fg-dim); font-size: 0.95rem;">Fill in the details below to schedule your event.</p>
+            </header>
+
+            <div class="field-group">
+                <label for="event_title">Event Title</label>
+                <input type="text" name="title" id="event_title" class="title" required placeholder="Enter a descriptive title">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="field-group">
+                    <label for="event_date">Date</label>
+                    <input type="date" name="date" id="event_date" required>
+                </div>
+                
+                <div class="field-group" style="display: flex; flex-direction: column; justify-content: center;">
+                    <div style="display: flex; gap: 1.5rem;">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="toggle_time" checked>
+                            <label for="toggle_time" style="margin: 0; cursor: pointer;">Include Time</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="toggle_address" checked>
+                            <label for="toggle_address" style="margin: 0; cursor: pointer;">Include Location</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="time-fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="field-group">
+                    <label for="event_time_start">Start Time</label>
+                    <input type="time" name="time_start" id="event_time_start">
+                </div>
+                <div class="field-group">
+                    <label for="event_time_end">End Time</label>
+                    <input type="time" name="time_end" id="event_time_end">
+                </div>
+            </div>
+
+            <div class="field-group" id="address-field">
+                <label for="event_address">Location / Address</label>
+                <input type="text" name="address" id="event_address" placeholder="Physical or virtual location">
+            </div>
+
+            <div class="field-group">
+                <label for="event_image">Event Cover Image</label>
+                <div style="position: relative;">
+                   <input type="file" name="image" id="event_image" accept="image/*" style="padding: 0.5rem;">
+                   <p style="font-size: 0.8rem; color: var(--fg-dim); margin-top: 0.4rem;">High-quality images (16:9) work best.</p>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label for="event_body">Description <small>(supports Markdown)</small></label>
+                <textarea name="body" id="event_body" required placeholder="Describe what's happening..."></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="field-group">
+                    <label for="event_icon">Badge Icon</label>
+                    <input type="text" name="icon" id="event_icon" placeholder="e.g. star, trophy, music">
+                </div>
+                <div class="field-group">
+                    <label for="event_icon_priority">Importance Priority (1-10)</label>
+                    <input type="number" name="icon_priority" id="event_icon_priority" min="1" max="10" placeholder="5">
+                </div>
+            </div>
+
+            <button type="submit" id="submit-btn" style="width: 100%; height: 55px; font-size: 1.1rem; background: var(--accent); color: #fff;">
+                <i class="fa-solid fa-paper-plane"></i> <span id="submit-text">Publish Event</span>
+            </button>
+        </form>
+    </main>
+
+    <script src="create-event.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>

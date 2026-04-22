@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Calendar | Admin Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin-style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 10% 20%, rgba(35, 134, 54, 0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(35, 134, 54, 0.1) 0%, transparent 40%),
+                        var(--bg-deep);
+            padding: 1rem;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-card p {
+            text-align: center;
+            color: var(--fg-dim);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--fg-dim);
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            color: var(--fg-main);
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+            outline: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            margin-top: 1rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px 0 var(--accent-glow);
+        }
+
+        .login-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 var(--accent-glow);
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--fg-dim);
+        }
+
+        .footer-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <h1><i class="fa-solid fa-shield-halved"></i></h1>
+        <h1>Admin Login</h1>
+        <p>Access your event management portal</p>
+
+        <form id="login-form">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="login-btn">Sign In</button>
+        </form>
+
+        <div class="footer-link">
+            Don't have an account? <a href="signup.html">Create one</a>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        const form = document.getElementById('login-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = 'Signing in...';
+
+            try {
+                const response = await fetch('/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    auth.setToken(data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Failed',
+                        text: data.error || 'Invalid credentials',
+                        background: '#161b22',
+                        color: '#e6edf3',
+                        confirmButtonColor: '#238636'
+                    });
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                }
+            } catch (err) {
+                console.error(err);
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>

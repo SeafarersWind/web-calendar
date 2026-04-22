@@ -1,0 +1,96 @@
+{
+	// The name of this file should describe the date in yyyy.mm.dd format.
+	
+	"events": [
+		{
+			// (REQUIRED) Title will appear on the calendar.
+			"title": "New Years' Day",
+			
+			// (REQUIRED) The image will appear on the information panel.
+			// The path will start in directory events/images.
+			// Image should be large.
+			"image": "image path",
+			
+			// (REQUIRED) Body of the event in markdown format.
+			//  (https://markdowneditor.net/markdown-editor/)
+			// Remember that any double quotations (") must be preceeded by a
+			//  Backslash (\") or the json file will break.
+			// Furthermore, any backslash (\) should be preceeded by another
+			//  Backslash (\\) or it will not show up correctly.
+			"information": "*Happy new year!*",
+			
+			// (OPTIONAL) true or false.
+			// Default is false.
+			"all-day": false,
+			// REQUIRED if all-day is false.
+			// OPTIONAL if all-day is true.
+			// Time-start and time-end should be formatted with the hour,
+			//  minute, and am/pm indicator (e.g. 12:30 pm).
+			"time-start": "1:00 pm",
+			"time-end": "4:00 pm",
+			
+			// (REQUIRED) Address of the location where attendees will show up.
+			// Any additional details about the location should be included in
+			//  the "information" tag.
+			"address": "1 Centennial Square",
+			// (OPTIONAL) The name of the location, if it has one.
+			"location": "Centennial Square",
+			
+			// (OPTIONAL) Icon to display on calendar.
+			// Must be the name of an icon in the icons folder.
+			// Exclude file extentions
+			//  (e.g. "events/icons/soup.png" should be "soup").
+			// Icons should be 128x128 png files identifiable at a small scale.
+			"icon": "icon name",
+			// (OPTIONAL) Determines which icons will replace other icons.
+			// Higher values replace lower values.
+			// Recurring events should usually have lower icon priorities.
+			// Default it 0.
+			"icon-priority": 1,
+			
+			// (OPTIONAL) Number of days the event lasts.
+			// Default is 1.
+			"duration": 1
+		},
+		
+		
+		// Multiple events may be included in one file.
+		// When adding an event on a day that already has an event, append
+		//  the event onto the existing file like this.
+		// Remember to include the comma at the end of the previous closing
+		//  brace or the json file will break.
+		{
+			"title": "New Years' Day",
+			
+			"image": "image path",
+			
+			"information": "*Happy new year!*",
+			
+			"all-day": true,
+			
+			"location": "Centennial Square",
+			"address": "1 Centennial Square",
+			
+			"icon": "icon name",
+			"icon-priority": 1
+		},
+		
+		{
+			"title": "New Years' Day",
+			
+			"image": "image path",
+			
+			"information": "*Happy new year!*",
+			
+			"all-day": false,
+			"time-start": "1:00 pm",
+			"time-end": "4:00 pm",
+			
+			"location": "Centennial Square",
+			"address": "1 Centennial Square",
+			
+			"icon": "icon name",
+			"icon-priority": 1
+		},
+	]
+}

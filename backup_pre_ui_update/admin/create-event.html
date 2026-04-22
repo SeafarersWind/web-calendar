@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Create/Edit Event - Admin</title>
+	<link href="admin-style.css" rel="stylesheet">
+    <style>
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+        }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        fieldset.create-event {
+            border: 1px solid rgba(254, 238, 136, 0.2);
+            border-radius: 16px;
+            background: rgba(48, 25, 0, 0.3);
+            padding: 2rem;
+        }
+        legend {
+            color: #fe8;
+            font-weight: 600;
+            padding: 0 1rem;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body style="height: auto; overflow: auto; display: block; padding: 2rem;">
+    <script src="auth.js"></script>
+    <div class="header-actions">
+        <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
+        <button class="back-btn" onclick="auth.logout()" style="background: #ff4d4d; border: none;">Logout</button>
+    </div>
+
+	<main style="max-width: 800px; margin: 0 auto;">
+		<form id="event-form">
+			<fieldset class="create-event">
+				<legend>Event Details</legend>
+				
+                <h1>Create New Event</h1>
+
+				<label for="event_title">Title</label>
+				<input type="text" name="title" id="event_title" class="title" required placeholder="Event title">
+				
+				<div class="line">
+					<span style="flex: 1;">
+						<label for="event_date">Date</label>
+						<input type="date" name="date" id="event_date" required>
+					</span>
+					<span style="flex: 1;">
+						<label for="event_time_start"><input type="checkbox" checked>Start Time</label>
+						<input type="time" name="time_start" id="event_time_start">
+					</span>
+					<span style="flex: 1;">
+						<label for="event_time_end"><input type="checkbox" checked>End Time</label>
+						<input type="time" name="time_end" id="event_time_end">
+					</span>
+				</div>
+
+				<div class="line">
+					<span style="flex: 2;">
+						<label for="event_address"><input type="checkbox" checked>Address</label>
+						<input type="text" name="address" id="event_address" placeholder="Physical address">
+					</span>
+					<span style="flex: 1;">
+						<label for="event_image"><input type="checkbox" checked>Image</label>
+						<input type="file" name="image" id="event_image" accept="image/*">
+					</span>
+				</div>
+
+				<label for="event_body">Body <small>(supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">markdown formatting</a>)</small></label>
+				<textarea name="body" id="event_body" style="min-height: 15rem;" required placeholder="Describe your event..."></textarea>
+				
+				<div class="line">
+					<span style="flex: 1;">
+						<label for="event_icon"><input type="checkbox" checked>Icon Name</label>
+						<input type="text" name="icon" id="event_icon" placeholder="e.g. star">
+					</span>
+					<span style="flex: 1;">
+						<label for="event_icon_priority">Icon Priority (1-10)</label>
+						<input type="number" name="icon_priority" id="event_icon_priority" min="1" max="10">
+					</span>
+				</div>
+
+				<input type="submit" value="Publish Event" style="background: #fe8; color: #301900; font-weight: bold; cursor: pointer; border: none; padding: 1rem; border-radius: 8px; font-size: 1.1rem; margin-top: 2rem;">
+			</fieldset>
+		</form>
+	</main>
+
+	<script src="create-event.js"></script>
+</body>
+
+</html>
