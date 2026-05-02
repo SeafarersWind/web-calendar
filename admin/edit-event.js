@@ -162,7 +162,7 @@ inputImage.addEventListener('change', (e) => {
 
 
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   event.preventDefault()
 
   const formData = new FormData(form)
@@ -180,15 +180,25 @@ form.addEventListener("submit", (e) => {
 
   console.log(formData)
 
-  fetch('', {
-      method: "POST",
-      body: formData,
-      redirect: 'follow'
-  })
-  .then(response => {
-      window.location.href = response.url
-  })
-  .catch(function(err) {
-      console.info(err + " url: " + url);
-  })
+  try {
+    const response = await fetch('', {
+        method: "POST",
+        body: formData,
+        headers: auth.getHeaders()
+    })
+
+    if (response.ok) {
+        window.location.href = '/admin/dashboard'
+    } else if (response.status === 401 || response.status === 403) {
+        auth.logout()
+    } else {
+        const errorData = await response.json()
+        alert('Error saving event: ' + (errorData.error || response.statusText))
+    }
+  }
+
+  catch(err) {
+      console.error(err);
+      alert('Network error while saving event');
+  }
 })

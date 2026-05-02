@@ -34,6 +34,8 @@ function renderEvents(events) {
       if(event.image) {
         eventImage.style.display = 'block'
         eventImage.src = `/images/${event.image}`
+      } else {
+      	eventImage.style.display = 'none'
       }
       eventInfo.innerHTML = DOMPurify.sanitize(marked.parse(event.body))
 

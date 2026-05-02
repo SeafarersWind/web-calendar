@@ -46,7 +46,7 @@ a:active { color: #4CF; }
 	--event-date-fg: #fff;
 }
 
-#event-container {
+#display-container {
 	position: relative;
 	width: 60%;
 	min-height: 100%;
@@ -342,7 +342,7 @@ a:active { color: #4CF; }
 		overflow: visible;
 	}
 	
-	#event-container {
+	#display-container {
 		width: 100%;
 		min-height: 100vh;
 		overflow: visible;

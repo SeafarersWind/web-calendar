@@ -4,10 +4,14 @@ const monthYear = document.getElementById('month-year')
 const prevMonthBtn = document.getElementById('prev-month')
 const nextMonthBtn = document.getElementById('next-month')
 
+const eventContainer = document.getElementById('event-container')
 const eventTitle = document.getElementById('event-title')
 const eventImage = document.getElementById('event-image')
 const eventInfo = document.getElementById('event-info')
+
+const eventListContainer = document.getElementById('event-list-container')
 const eventList = document.getElementById('event-list')
+
 const eventFullList = document.getElementById('event-full-list')
 
 const closeButton = document.getElementById('close-button')
@@ -29,6 +33,8 @@ const months = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'
 ]
+
+let clickDate
 
 
 
@@ -204,15 +210,16 @@ async function getEventData(startDate, endDate) {
 
 
 function clearEventDisplay() {
+  eventContainer.style.display = 'none'
   eventTitle.textContent = ""
-  eventTitle.style.display = 'none'
   eventImage.src = ""
-  eventImage.style.display = 'none'
   eventInfo.textContent = ""
-  eventInfo.style.display = 'none'
+
+  eventListContainer.style.display = 'none'
   eventList.replaceChildren()
-  eventList.style.display = 'none'
+
   eventFullList.style.display = 'none'
+
   closeButton.style.display = 'none'
 }
 
@@ -222,18 +229,17 @@ function displayEvent(event) {
   clearEventDisplay()
 
   if(event.title) {
-    eventTitle.style.display = 'block'
     eventTitle.textContent = event.title
   }
 
   if(event.image) {
-    eventImage.style.display = 'block'
     eventImage.src = `/images/${event.image}`
   }
 
   if(event.body) { eventInfo.innerHTML = DOMPurify.sanitize(marked.parse(event.body)) }
   else { eventInfo.textContent = "No description provided." }
-  eventInfo.style.display = 'block'
+
+  eventContainer.style.display = 'block'
 
   closeButton.style.display = 'block'
 }
@@ -262,7 +268,23 @@ function displayEventList(list, date) {
     eventList.appendChild(event)
   }
 
-  eventList.style.display = 'block'
+  eventListContainer.style.display = 'block'
+
+  closeButton.style.display = 'block'
+}
+
+function displayEmptyList(date) {
+  clearEventDisplay()
+
+  let listDate = document.createElement('div')
+  listDate.textContent = dateTitle(date)
+  eventList.appendChild(listDate)
+
+  let listInfo = document.createElement('p')
+  listInfo.textContent = "There are no events listed for this day."
+  eventList.appendChild(listInfo)
+
+  eventListContainer.style.display = 'block'
 
   closeButton.style.display = 'block'
 }
@@ -287,16 +309,22 @@ function dateTitle(date) {
 async function preloadEvent(eventId) {
   await fetch(`/event/${eventId}`)
   .then(response => {
-    if(!response.ok) { throw new Error("HTTP error " + response.status) }
+    if(!response.ok) {
+      if(response.status == 404) return false
+      else throw new Error("HTTP error " + response.status)
+    }
     return response.json()
   })
   .then(event => {
-    const eventDate = new Date(event.date * (1000*3600*24))
-    currentMonth = eventDate.getUTCMonth()
-    currentYear = eventDate.getUTCFullYear()
-    currentEvent = event
+    if(event) {
+      const eventDate = new Date(event.date * (1000*3600*24))
+      currentMonth = eventDate.getUTCMonth()
+      currentYear = eventDate.getUTCFullYear()
+      currentEvent = event
+    }
   })
   .catch(function (err) {
+    console.log(err.name)
     console.error(err)
   })
 }
@@ -328,7 +356,6 @@ let urlParams = new URLSearchParams(window.location.search.substring(1))
 if(urlParams.get('e')) {
   await preloadEvent(urlParams.get('e'))
 }
-console.log(currentEvent)
 
 renderCalendar(currentMonth, currentYear)
 getEvents(firstDate, lastDate).then(() => {
@@ -340,6 +367,20 @@ getEvents(firstDate, lastDate).then(() => {
 
   getEvents(firstDate - 60, lastDate + 60)
 })
+
+if(isAdmin) {
+  const createButton = document.createElement('button')
+  createButton.textContent = "Create New Event"
+  eventListContainer.appendChild(createButton)
+
+  const editButton = document.createElement('button')
+  editButton.textContent = "Edit"
+  eventContainer.appendChild(editButton)
+
+  const deleteButton = document.createElement('button')
+  deleteButton.textContent = "Delete"
+  eventContainer.appendChild(deleteButton)
+}
 
 
 
@@ -368,18 +409,18 @@ nextMonthBtn.addEventListener('click', () => {
 
 calendarDates.addEventListener('click', (e) => {
   //const clickDate = e.target.getAttribute('date')
-  const clickDate = Array.prototype.indexOf.call(calendarDates.children, e.target) + firstDate
+  clickDate = Array.prototype.indexOf.call(calendarDates.children, e.target) + firstDate
   console.log(clickDate)
 
   if(dates[clickDate]) {
     const events = dates[clickDate]
-    if(events.length == 1) {
+    if(events.length == 1 && !isAdmin) {
       displayEvent(events[0])
     } else {
-      displayEventList(events, new Date(clickDate))
+      displayEventList(events, clickDate)
     }
   } else {
-    displayEventFullList()
+    displayEmptyList(clickDate)
   }
 })
 
